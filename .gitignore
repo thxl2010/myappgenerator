@@ -3,3 +3,8 @@ bower_components
 node_modules
 /logs
 /.settings
+public/assets/
+public/fonts/
+public/images/
+public/js/
+public/style/

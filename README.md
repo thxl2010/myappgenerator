@@ -121,7 +121,7 @@ $ npm install
   }
   ```
 
-## [Bower](https://bower.io/) - A package manager for the web  
+- [Bower](https://bower.io/) - A package manager for the web  
 ---------------------------------------------
 
 # 3. 启动
