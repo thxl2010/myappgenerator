@@ -1,0 +1,47 @@
+{
+  "name": "myappgenerator",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "browserify": {
+    "transform": [
+      "jadeify"
+    ]
+  },
+  "dependencies": {
+    "body-parser": "~1.15.1",
+    "bower": "^1.7.9",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "extend": "^3.0.0",
+    "jade": "~1.11.0",
+    "jstransformer-markdown-it": "^0.2.3",
+    "morgan": "~1.7.0",
+    "mysql": "^2.11.1",
+    "nib": "^1.1.2",
+    "serve-favicon": "~2.3.0",
+    "stylus": "^0.54.5"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.14.0",
+    "browserify": "^13.1.0",
+    "del": "^2.2.1",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-stylus": "^2.5.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "jadeify": "^4.6.0",
+    "merge-stream": "^1.0.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
+  }
+}

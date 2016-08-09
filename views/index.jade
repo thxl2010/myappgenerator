@@ -1,0 +1,44 @@
+extends layout
+
+block css
+  link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.min.css')
+
+block content
+  h1= title
+  p Welcome to #{signature}！ —— #{title}
+  case version
+    when 0
+      p 标准版 ☆
+    when 1
+      p 高级版 ☆☆
+    when 2
+      p 旗舰版 ☆☆☆
+
+  .operate
+    input#name
+    input#signature
+    button#add 添加用户
+
+  #user-list
+    table.table
+      thead
+        tr
+          th 用户名
+          th 签名
+          th 版本
+          th 手机号码
+      tbody
+    .pager
+
+  // markdown过滤器
+  //#filter-md
+    include:markdown-it ./templates/Readme_zh-cn.md
+
+
+
+block script
+  script(src="/bower_components/jquery/dist/jquery.min.js")
+  script(src="/thirdParty/jquery/jquery.pagination.min.js")
+  script(src="/js/index.js")
+
+

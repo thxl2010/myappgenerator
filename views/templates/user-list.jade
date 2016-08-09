@@ -1,0 +1,17 @@
+tr
+  td #{user.username}
+  td #{user.signature}
+  - if (user.purchaseVersion) {
+    -if (user.purchaseVersion == 0) {
+      td 标准版
+    -} else if (user.purchaseVersion == 1 || user.purchaseVersion == 2 || user.purchaseVersion == 3) {
+     td 高级版
+    -} else if (user.purchaseVersion >= 4) {
+      td 高级版
+    -}
+  -} else {
+    td 版本异常
+  -}
+  td #{user.userMobileNumber}
+
+
