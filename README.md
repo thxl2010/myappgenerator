@@ -126,5 +126,6 @@ $ npm install
 
 # 3. 启动
 - `npm install`
+- `bower install`
 - gulp：`gulp builds` || `gulp watch.dev`
 - start server：`set DEBUG=myappgenerator & npm start`

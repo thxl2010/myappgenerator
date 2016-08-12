@@ -3,7 +3,7 @@
  */
 var Common = require('./components/common');
 var Services = require('./components/services');
-var UserListT = require('../../../views/templates/user-list.jade');
+var UserListT = require('../../views/templates/user-list.jade');
 
 var $name = $('#name');
 var $signature = $('#signature');
@@ -47,7 +47,7 @@ var $table = $userList.find('table>tbody');
 var $pager = $userList.find('.pager');
 // 获取所有用户列表
 function getAllUser() {
-  Common.doAjaxWithInfo(function () { // queryUserCount queryAll
+  Common.doAjaxWithInfo(function (done) {
     Services.ajaxGet('/users/queryUserCount', function (err, count) {
       if(err) {
         return done(err);
@@ -67,7 +67,6 @@ function getAllUser() {
                 var $userList = $(UserListT({user: data})).data(data);
                 $table.append($userList);
               }
-              done();
             });
           },
           items_per_page:pageSize,
@@ -77,6 +76,7 @@ function getAllUser() {
           next_text:'下一页'
         });
       }
+      done();
     });
   });
 }

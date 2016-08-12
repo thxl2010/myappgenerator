@@ -3,46 +3,50 @@
 /**
  * gulp
  * npm install --save-dev gulp-util gulp-concat gulp-rename merge-stream vinyl-source-stream
-    gulp-jade jadeify gulp-stylus nib
+    gulp-jade jadeify gulp-stylus nib jshint gulp-jshint
     gulp-uglify gulp-sourcemaps gulp-minify-css gulp-imagemin del gulp-watch browserify watchify
+    gulp-rev-append
  */
 
 var fs = require('fs');
 var path = require('path');
-var gutil = require('gulp-util');
 var gulp = require('gulp');
-var del = require('del');
-var rename = require('gulp-rename');
-var concat = require('gulp-concat');
+var gutil = require('gulp-util');
+var del = require('del'); // 清除文件
+var rename = require('gulp-rename'); // 重命名
+var concat = require('gulp-concat'); // 合并文件
 var merge = require('merge-stream');
 var source = require('vinyl-source-stream');
-var uglify = require('gulp-uglify');
+var uglify = require('gulp-uglify'); // 压缩js代码
 var sourcemaps = require('gulp-sourcemaps');
-var minifycss = require('gulp-minify-css');
+var cleancss = require('gulp-clean-css'); // 压缩css
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var jade = require('gulp-jade');
 var stylus = require('gulp-stylus');
 var nib = require('nib');
+var jshint = require('gulp-jshint');   // js检查
+var rev = require('gulp-rev-append'); // 插入文件指纹（MD5）,文件引用加版本号
+var cache = require('gulp-cache'); // 缓存当前任务中的文件，只让已修改的文件通过管道
+var browserSync = require('browser-sync'); // 保存自动刷新
 
-var jsConfig = require('./resources/assets/js/config/index');
+var jsConfig = require('./resources/js/config/index');
 
 // var sass = require('gulp-sass');
 // var autoprefixer = require('gulp-autoprefixer');
-// var jshint = require('gulp-jshint');   // js检查
 // var notify = require('gulp-notify');
-// var cache = require('gulp-cache');
-// var clean = require('gulp-clean');
-// var browserSync = require('browser-sync');
+// var clean = require('gulp-clean'); // 清除文件
 // var reload = browserSync.reload;
 
 var pathSrc = {
-  scripts: './resources/assets/js/',
+  scripts: './resources/js/',
   images: './resources/images/',
   styl: './resources/style/',
   jade: './views/',
-  bower: './public/bower_components/'
+  bower: './resources/bower_components/',
+  thirdParty: './resources/thirdParty/,',
+  fonts: './resources/fonts/'
 };
 
 var pathDst = {
@@ -50,7 +54,10 @@ var pathDst = {
   images: './public/images',
   css: './public/style',
   html: './public/views',
-  bower: './public/bower_components'
+  bower: './public/bower_components',
+  thirdParty: './public/thirdParty/,',
+  fonts: './public/fonts/',
+  build: './public/'
 };
 
 var resourcesSrc = './resources';
@@ -60,6 +67,10 @@ var resourcesDest = './public';
 gulp.task('clean', function () {
   gulp.src(pathDst.build, {read: false})
       .pipe(clean());
+});
+// del
+gulp.task('del', function (cb) {
+  del(pathDst.build + '/**/*', cb);
 });
 
 gulp.task('copy.resources', function () {
@@ -99,7 +110,7 @@ gulp.task('html', function () {
 gulp.task('styles', function () {
   return gulp.src(pathSrc.styl + '/**/*.styl')
       .pipe(stylus({
-        //compress: true,
+        compress: true,
         use: nib(),
         import: ['nib']
       }))
@@ -121,7 +132,7 @@ gulp.task('scripts', function () {
         .pipe(source(fileName))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(pathDst.scripts))
         .on('end', gutil.log.bind(gutil, 'browserify \'' + path.join(pathDst.scripts, fileName) + '\'.'));
@@ -139,12 +150,13 @@ gulp.task('scripts', function () {
 
 // compressJS
 gulp.task('compressJS', function () {
-  return gulp.src('./src/main/resources/public/bower_components/jQuery-photoClip/js/jquery.photoClip.js')
+  return gulp.src('./resources/bower_components/jQuery-photoClip/js/jquery.photoClip.js')
   //.pipe(jshint('.jshintrc'))
   //.pipe(jshint.reporter('default'))
       .pipe(uglify())
       .pipe(gulp.dest(pathDst.scripts))
-      .pipe(notify({message: 'Scripts task complete'}));
+      //.pipe(notify({message: 'Scripts task complete'}))
+      ;
 });
 
 gulp.task('images', function () {
