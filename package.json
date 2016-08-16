@@ -1,6 +1,10 @@
 {
   "name": "myappgenerator",
   "version": "0.0.0",
+  "author": {
+    "name": "Duyb",
+    "email": "1255248666@qq.com"
+  },
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
