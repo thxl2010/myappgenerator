@@ -1,9 +1,6 @@
 {
   "name": "app",
   "version": "0.0.0",
-  "authors": [
-    "Duyb <1255248666@qq.com>"
-  ],
   "moduleType": [
     "amd",
     "globals",
