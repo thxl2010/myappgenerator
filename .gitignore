@@ -3,4 +3,4 @@ node_modules
 /logs
 /.settings
 public
-resources/bower_components
+resources/bower_components/

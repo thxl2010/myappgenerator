@@ -14,6 +14,9 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// 禁用X-Powered-By
+app.disable('x-powered-by');
+
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public/images/logo.jpg')));
 app.use(logger('dev'));
@@ -22,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'))); // 利用 Express 托管静态文件 http://www.expressjs.com.cn/starter/static-files.html
 
+// routes
 app.use('/', routes);
 app.use('/users', users);
 

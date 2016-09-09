@@ -93,14 +93,16 @@ gulp.task('bower', function () {
 gulp.task('jade', function () {
   return gulp.src(pathSrc.jade + '/**/*.jade')
   //.pipe(jade())
+      .pipe(rev())
       .pipe(gulp.dest(pathDst.html))
       //.pipe(notify({ message: 'jade task complete' }))
       ;
 });
 
 gulp.task('html', function () {
-  return gulp.src(pathSrc.jade + '/**/*.jade')
+  return gulp.src(pathSrc.jade + '/*.jade')
       .pipe(jade())
+      .pipe(rev())
       .pipe(gulp.dest(pathDst.html))
       //.pipe(notify({ message: 'html task complete' }))
       ;
