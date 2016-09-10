@@ -26,7 +26,8 @@ var server = http.createServer(app);
  */
 
 server.listen(port, function () {
-  console.log('start: server listening on port ' + port);
+  console.log( 'myappgenerator started in ' + app.get('env') +' mode, on http://localhost:' +
+      app.get('port') + ' ; press Ctrl-C to terminate.' );
 });
 server.on('error', onError);
 server.on('listening', onListening);
