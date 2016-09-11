@@ -5,7 +5,7 @@
  * npm install --save-dev gulp-util gulp-concat gulp-rename merge-stream vinyl-source-stream
     gulp-jade jadeify gulp-stylus nib jshint gulp-jshint
     gulp-uglify gulp-sourcemaps gulp-minify-css gulp-imagemin del gulp-watch browserify watchify
-    gulp-rev-append
+    gulp-rev gulp-rev-append
  */
 
 var fs = require('fs');
@@ -27,7 +27,7 @@ var jade = require('gulp-jade');
 var stylus = require('gulp-stylus');
 var nib = require('nib');
 var jshint = require('gulp-jshint');   // js检查
-var rev = require('gulp-rev-append'); // 插入文件指纹（MD5）,文件引用加版本号
+var revAppend = require('gulp-rev-append'); // 插入文件指纹（MD5）,文件引用加版本号
 var cache = require('gulp-cache'); // 缓存当前任务中的文件，只让已修改的文件通过管道
 var browserSync = require('browser-sync'); // 保存自动刷新
 
@@ -93,7 +93,7 @@ gulp.task('bower', function () {
 gulp.task('jade', function () {
   return gulp.src(pathSrc.jade + '/**/*.jade')
   //.pipe(jade())
-      .pipe(rev())
+      //.pipe(rev())
       .pipe(gulp.dest(pathDst.html))
       //.pipe(notify({ message: 'jade task complete' }))
       ;
@@ -102,7 +102,7 @@ gulp.task('jade', function () {
 gulp.task('html', function () {
   return gulp.src(pathSrc.jade + '/*.jade')
       .pipe(jade())
-      .pipe(rev())
+      //.pipe(rev())
       .pipe(gulp.dest(pathDst.html))
       //.pipe(notify({ message: 'html task complete' }))
       ;
