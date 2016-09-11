@@ -8,12 +8,6 @@ block content
   h1= title
   p Welcome to #{signature}！ —— #{title}
 
-  button#prev 上一页
-  span 第
-    em#page 1
-    | 页
-  button#next 下一页
-
   table
     thead
       tr
@@ -31,12 +25,10 @@ block content
           td
             a(href="https://cnodejs.org#{topic.href}", target="_blank") https://cnodejs.org#{topic.href}
 
-
-
 block script
-  script(src="/bower_components/jquery/dist/jquery.min.js")
+  //-script(src="/bower_components/jquery/dist/jquery.min.js")
   //-script(src="/thirdParty/jquery/jquery.pagination.min.js")
-  script(src="/js/spider-cnode.js")
+  //-script(src="/js/spider-cnode.js")
 
 
 
