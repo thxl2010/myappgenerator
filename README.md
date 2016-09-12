@@ -132,4 +132,15 @@ $ npm install
 
 # 4. 使用 superagent 与 cheerio 完成简单爬虫
 1. 学习使用 superagent 抓取网页
+  superagent( http://visionmedia.github.io/superagent/ ) 是个轻量的的 http 方面的库，
+  是nodejs里一个非常方便的客户端请求代理模块，当我们需要进行 get 、 post 、 head 等网络请求时，尝试下它吧。
 2. 学习使用 cheerio 分析网页
+  cheerio( https://github.com/cheeriojs/cheerio ) 大家可以理解成一个 Node.js 版的 jquery，
+  用来从网页中以 css selector 取数据，使用方式跟 jquery 一样一样的。
+3. eventproxy
+   eventproxy( https://github.com/JacksonTian/eventproxy ) 非常轻量的工具，但是能够带来一种事件式编程的思维变化。
+   用 js 写过异步的同学应该都知道，如果你要并发异步获取两三个地址的数据，并且要在获取到数据之后，对这些数据一起进行利用的话，
+   常规的写法是自己维护一个计数器。先定义一个 var count = 0，然后每次抓取成功以后，就 count++。如果你是要抓取三个源的数据，
+   由于你根本不知道这些异步操作到底谁先完成，那么每次当抓取成功的时候，就判断一下count === 3。当值为真时，使用另一个函数继续完成操作。
+   而 eventproxy 就起到了这个计数器的作用，它来帮你管理到底这些异步操作是否完成，完成之后，它会自动调用你提供的处理函数，并将抓取到的数据当参数传过来。
+  

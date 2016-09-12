@@ -1,0 +1,43 @@
+//-Created by Duyb on 2016/9/12.
+extends layout
+
+block css
+  link(rel='stylesheet', href='/style/spider-cnode.css')
+
+block content
+  h1= title
+  p Welcome to #{signature}！ —— #{title}
+
+  //button#prev 上一页
+  //span 第
+  //  em#page 1
+  //  | 页
+  //button#next 下一页
+
+  table
+    thead
+      tr
+        th 编号
+        th 用户
+        th 文章
+        th 链接
+        th 时间
+    tbody
+      each article, i in articles
+        tr
+          td #{i + 1}
+          td
+            span #{article.userName}
+            //img(src="http:#{article.userImg}", title="#{article.userName}", style="width: 30px; height: 30px; border-radius: 3px;")
+          td #{article.title}
+          td
+            a(href="#{article.href}", target="_blank") #{article.href}
+          td #{article.time}
+
+block script
+  script(src="/bower_components/jquery/dist/jquery.min.js")
+  //-script(src="/thirdParty/jquery/jquery.pagination.min.js")
+  script(src="/js/spider-cnode.js")
+
+
+
