@@ -14,21 +14,20 @@ block content
         th 编号
         th 用户
         th 话题
-        th 链接
+        th 时间
     tbody
       each topic, i in topics
         tr
           td #{i + 1}
           td
             img(src="#{topic.userImg}", title="#{topic.userName}", style="width: 30px; height: 30px; border-radius: 3px;")
-          td #{topic.title}
-          td
-            a(href="https://cnodejs.org#{topic.href}", target="_blank") https://cnodejs.org#{topic.href}
+          td #{topic.info}
+          td #{topic.time}
 
 block script
   //-script(src="/bower_components/jquery/dist/jquery.min.js")
   //-script(src="/thirdParty/jquery/jquery.pagination.min.js")
-  //-script(src="/js/spider-cnode.js")
+  //-script(src="/js/spider-qzone.js")
 
 
 
