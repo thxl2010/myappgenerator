@@ -3,11 +3,16 @@
  */
 var superagent = require('superagent');
 var cheerio = require('cheerio');
+var eventproxy = require('eventproxy');
+var ep = new eventproxy();
+var url = require('url');
+
+var cnodeUrl = 'https://cnodejs.org/';
 
 exports.index = function(req, res, next) {
 
   // 用 superagent 去抓取 https://cnodejs.org/ 的内容
-  superagent.get('https://cnodejs.org/') // https://cnodejs.org/?tab=all&page=2
+  superagent.get(cnodeUrl) // https://cnodejs.org/?tab=all&page=0
       .end(function (err, sres) {
         // 常规的错误处理
         if (err) {
@@ -23,10 +28,12 @@ exports.index = function(req, res, next) {
         $('#topic_list .topic_title').each(function (idx, element) {
           var $element = $(element);
           var $user = $element.closest('.cell').find('.user_avatar img');
-          
+
+          var href = url.resolve(cnodeUrl, $element.attr('href'));
+
           items.push({
             title: $element.attr('title'),
-            href: $element.attr('href'),
+            href: href,
             userImg: $user.attr('src'),
             userName: $user.attr('title')
           });
@@ -43,7 +50,7 @@ exports.index = function(req, res, next) {
 
 function getTopicsByPage(req, res) {
   var page = req.query.page;
-  superagent.get('https://cnodejs.org/?tab=all&page=' + page)
+  superagent.get(cnodeUrl + '?tab=all&page=' + page)
       .end(function (err, sres) {
         // 常规的错误处理
         if (err) {

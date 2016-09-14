@@ -142,5 +142,12 @@ $ npm install
    用 js 写过异步的同学应该都知道，如果你要并发异步获取两三个地址的数据，并且要在获取到数据之后，对这些数据一起进行利用的话，
    常规的写法是自己维护一个计数器。先定义一个 var count = 0，然后每次抓取成功以后，就 count++。如果你是要抓取三个源的数据，
    由于你根本不知道这些异步操作到底谁先完成，那么每次当抓取成功的时候，就判断一下count === 3。当值为真时，使用另一个函数继续完成操作。
-   而 eventproxy 就起到了这个计数器的作用，它来帮你管理到底这些异步操作是否完成，完成之后，它会自动调用你提供的处理函数，并将抓取到的数据当参数传过来。
+   而 eventproxy 就起到了这个**计数器**的作用，它来帮你**管理到底这些异步操作是否完成，完成之后，它会自动调用你提供的处理函数，并将抓取到的数据当参数传过来**。
+ 4. async
+  async( https://github.com/caolan/async#queueworker-concurrency )，async是一个流程控制工具包，
+  提供了直接而强大的异步功能mapLimit(arr, limit, iterator, callback)。
+  这次我们要介绍的是 async 的 mapLimit(arr, limit, iterator, callback) 接口。
+  另外，还有个常用的**控制并发连接数**的接口是 queue(worker, concurrency) ，大家可以去看看它的API。
   
+  当你需要去多个源(一般是小于 10 个)汇总数据的时候，用 eventproxy 方便；
+  当你需要用到队列，需要控制并发数，或者你喜欢函数式编程思维时，使用 async。

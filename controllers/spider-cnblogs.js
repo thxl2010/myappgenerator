@@ -5,13 +5,15 @@ var superagent = require('superagent');
 var cheerio = require('cheerio');
 var http = require('http');
 var url = require('url');
-var async = require('async');
+var async = require('async'); // 并发连接数控制
 var eventproxy = require('eventproxy');
 
 var ep = new eventproxy();
 var articles = []; // 存放爬取文章信息
 var pageUrls = []; // 存放文章地址
-var pageNum = 2; // 要爬取文章页数
+var urlsArray = [];	//存放爬取网址
+var catchDate = [];	//存放爬取数据
+var pageNum = 1; // 要爬取文章页数
 
 
 exports.index = function (req, res, next) {
@@ -48,24 +50,122 @@ exports.index = function (req, res, next) {
               userName: userName,
               time: time
             });
+            urlsArray.push(href);
 
-            //console.log('idx : ', idx, articles);
-
-            // 相当于一个计数器
-            ep.emit('BlogArticleHtml', articles);
+            // 相当于一个计数器 ep.emit() 来告诉 ep 自己，某某事件已经完成了。
+            ep.emit('BlogArticleHtml', href);
           });
         });
   });
+
+  // 命令 ep 重复监听 pageUrls.length * 20 次 `BlogArticleHtml` 事件再行动
   ep.after('BlogArticleHtml', pageUrls.length * 20, function (articleUrls) {
+    // articleUrls 是个数组，包含了 40 次 ep.emit('BlogArticleHtml', href) 中的那 pageUrls.length * 20 个 href
     // 当所有 'BlogArticleHtml' 事件完成后的回调触发下面事件
     // ...
-    //console.log('***************************************');
-    //console.log('articleUrls : ', articleUrls, articles);
+    //console.log('******************* ep.after ********************');
+    //console.log('articleUrls : ', articleUrls);
 
-    res.render('spider-cnblogs', {
-      title: '爬虫-cnblogs',
-      signature: '白马山庄',
-      articles: articles
+
+    // 使用async控制异步抓取
+    // mapLimit(arr, limit, iterator, [callback])
+    // 异步回调
+    async.mapLimit(articleUrls, 5, function (url, callback) {
+      reptileMove(url, callback);
+    }, function (err, result) {
+      // pageUrls.length * 20 个 URL 访问完成的回调函数
+      // ...
+      //console.log('********** async.mapLimit ***********\n result : \n', result);
+
+      res.render('spider-cnblogs', {
+        title: '爬虫-cnblogs',
+        signature: '白马山庄',
+        articles: articles,
+        blogsArr: blogsArr
+      });
     });
   });
 };
+
+// 控制并发数
+var curCount = 0;
+var blogsArr = [];
+var reptileMove = function (url, callback) {
+  //延迟毫秒数
+  var delay = parseInt((Math.random() * 30000000) % 1000, 10);
+  curCount++;
+  var cnblog;
+  //console.log('现在的并发数是', curCount, '，正在抓取的是', url, '，耗时' + delay + '毫秒');
+
+  superagent.get(url)
+      .end(function (err, sres) {
+        // 常规的错误处理
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        // sres.text 里面存储着请求返回的 html 内容
+        var $ = cheerio.load(sres.text);
+        // 收集数据
+        // 拼接URL
+        var currentBlogApp = url.split('/p/')[0].split('/')[3],
+            requestId = url.split('/p/')[1].split('.')[0],
+            appUrl = "http://www.cnblogs.com/mvc/blog/news.aspx?blogApp=" + currentBlogApp;
+
+        cnblog = $('#cnblogs_post_body');
+        //console.log('cnblog : ', cnblog);
+        blogsArr.push(cnblog);
+        //console.log('currentBlogApp is '+ currentBlogApp + '\n' + 'requestId id is ' + requestId);
+
+        // 收集用户个人信息，昵称、园龄、粉丝、关注
+        //personInfo(appUrl);
+      });
+
+  setTimeout(function () {
+    curCount--;
+    // callback(null, url + ' Call back content');
+    callback(null, cnblog);
+  }, delay);
+};
+
+// 抓取昵称、入园年龄、粉丝数、关注数
+function personInfo(url){
+  var infoArray = {};
+  superagent.get(url)
+      .end(function(err,ares){
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        var $ = cheerio.load(ares.text),
+            info = $('#profile_block a'),
+            len = info.length,
+            age = "",
+            flag = false,
+            curDate = new Date();
+
+        // 小概率异常抛错
+        try{
+          age = "20"+(info.eq(1).attr('title').split('20')[1]);
+        }
+        catch(err){
+          console.log(err);
+          age = "2012-11-06";
+        }
+
+        infoArray.name = info.eq(0).text();
+        infoArray.age = parseInt((new Date() - new Date(age))/1000/60/60/24);
+
+        if(len == 4){
+          infoArray.fans = info.eq(2).text();
+          infoArray.focus = info.eq(3).text();
+        }else if(len == 5){// 博客园推荐博客
+          infoArray.fans = info.eq(3).text();
+          infoArray.focus = info.eq(4).text();
+        }
+        //console.log('用户信息:'+JSON.stringify(infoArray));
+        catchDate.push(infoArray);
+      });
+}

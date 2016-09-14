@@ -1,4 +1,4 @@
-//-Created by Duyb on 2016/9/11.
+//-Created by Duyb on 2016/9/12.
 extends layout
 
 block css
@@ -19,24 +19,24 @@ block content
       tr
         th 编号
         th 用户
-        th 话题
+        th 文章
         th 链接
+        th 时间
     tbody
-      each topic, i in topics
+      each article, i in articles
         tr
           td #{i + 1}
           td
-            img(src="#{topic.userImg}", title="#{topic.userName}", style="width: 30px; height: 30px; border-radius: 3px;")
-          td #{topic.title}
+            span #{article.userName}
+            //img(src="http:#{article.userImg}", title="#{article.userName}", style="width: 30px; height: 30px; border-radius: 3px;")
+          td #{article.title}
           td
-            a(href="#{topic.href}", target="_blank") #{topic.href}
-
-
+            a(href="#{article.href}", target="_blank") #{article.href}
+          td #{article.time}
 
 block script
   script(src="/bower_components/jquery/dist/jquery.min.js")
-  //-script(src="/thirdParty/jquery/jquery.pagination.min.js")
-  script(src="/js/spider-cnode.js")
+  script(src="/js/spider-cnblogs-list.js")
 
 
 
