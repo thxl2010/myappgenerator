@@ -121,7 +121,20 @@ $ npm install
   }
   ```
 
- - [Bower](https://bower.io/) - A package manager for the web  
+- [Bower](https://bower.io/) - A package manager for the web
+- es6：[browserify & babel](http://babeljs.io/docs/setup/#installation) 
+  1. 安装[babelify](https://github.com/babel/babelify)：`npm install --save-dev babelify`
+  2. 使用
+   - CLI：`browserify script.js -o bundle.js -t [ babelify --presets [ es2015 react ] ]`
+   - Node:
+   ```
+   var fs = require("fs");
+   var browserify = require("browserify");
+   browserify("./script.js")
+     .transform("babelify", {presets: ["es2015", "react"]})
+     .bundle()
+     .pipe(fs.createWriteStream("bundle.js"));
+   ```
 -------------------------------------------------------------
 
 # 3. 启动
