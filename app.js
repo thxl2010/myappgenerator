@@ -8,11 +8,11 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var app = express();
+var app = express(); // 实例化Express对象
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'views')); // 视图
+app.set('view engine', 'jade');  // 模板引擎
 
 // 禁用X-Powered-By
 app.disable('x-powered-by');

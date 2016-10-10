@@ -38,7 +38,8 @@ exports.index = function (req, res, next) {
             var $element = $(element);
 
             var href = $element.find('.titlelnk').attr('href');
-            var title = $element.find('.titlelnk').text();
+
+/*            var title = $element.find('.titlelnk').text();
             var userImg = $element.find('.pfs').attr('src');
             var userName = $element.find('.post_item_foot a').eq(0).text();
             var time = $element.find('.post_item_foot').text().match(/[\d|\-|\:]/g).join('').substring(0, 15);
@@ -50,7 +51,7 @@ exports.index = function (req, res, next) {
               userName: userName,
               time: time
             });
-            urlsArray.push(href);
+            urlsArray.push(href);*/
 
             // 相当于一个计数器 ep.emit() 来告诉 ep 自己，某某事件已经完成了。
             ep.emit('BlogArticleHtml', href);
@@ -76,7 +77,7 @@ exports.index = function (req, res, next) {
       // pageUrls.length * 20 个 URL 访问完成的回调函数
       // ...
       //console.log('********** async.mapLimit ***********\n result : \n', result);
-
+      //console.log('catchDate : ', catchDate);
       res.render('spider-cnblogs', {
         title: '爬虫-cnblogs',
         signature: '白马山庄',
@@ -113,9 +114,18 @@ var reptileMove = function (url, callback) {
             requestId = url.split('/p/')[1].split('.')[0],
             appUrl = "http://www.cnblogs.com/mvc/blog/news.aspx?blogApp=" + currentBlogApp;
 
+        var title = $('#cb_post_title_url').text();
+        var userName = $('#profile_block').find('a').eq(0).text();
         cnblog = $('#cnblogs_post_body');
-        //console.log('cnblog : ', cnblog);
-        blogsArr.push(cnblog);
+        var time = $('#post-date').text();
+
+        blogsArr.push({
+          title: title,
+          href: url,
+          cnblog: cnblog,
+          userName: userName,
+          time: time
+        });
         //console.log('currentBlogApp is '+ currentBlogApp + '\n' + 'requestId id is ' + requestId);
 
         // 收集用户个人信息，昵称、园龄、粉丝、关注

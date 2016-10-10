@@ -23,18 +23,16 @@ block content
         th 链接
         th 时间
     tbody
-      each article, i in articles
-        tr(style="background-color: #ddd;")
+      each article, i in blogsArr
+        tr(style="background-color: #ddd;max-width: 1000px;")
           td #{i + 1}
-          td
-            span #{article.userName}
-            //img(src="http:#{article.userImg}", title="#{article.userName}", style="width: 30px; height: 30px; border-radius: 3px;")
-          td #{article.title}
+          td #{article.userName}
+          td(style="font-weight: bold") #{article.title}
           td
             a(href="#{article.href}", target="_blank") #{article.href}
           td #{article.time}
-        tr
-          td(colspan="4") !{blogsArr[i]}
+        tr(style="max-width: 1000px;")
+          td(colspan="4") !{article.cnblog}
 
 block script
   script(src="/bower_components/jquery/dist/jquery.min.js")

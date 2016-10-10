@@ -11,7 +11,7 @@ var eventproxy = require('eventproxy');
 var ep = new eventproxy();
 var articles = []; // 存放爬取文章信息
 var pageUrls = []; // 存放文章地址
-var pageNum = 5; // 要爬取文章页数
+var pageNum = 1; // 要爬取文章页数
 
 var cnblogUrl = 'http://www.cnblogs.com/';
 exports.index = function (req, res, next) {
