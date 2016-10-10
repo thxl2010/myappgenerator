@@ -121,8 +121,8 @@ $ npm install
   }
   ```
 
-- [Bower](https://bower.io/) - A package manager for the web  
----------------------------------------------
+ - [Bower](https://bower.io/) - A package manager for the web  
+-------------------------------------------------------------
 
 # 3. 启动
 - `npm install`
@@ -148,6 +148,5 @@ $ npm install
   提供了直接而强大的异步功能mapLimit(arr, limit, iterator, callback)。
   这次我们要介绍的是 async 的 mapLimit(arr, limit, iterator, callback) 接口。
   另外，还有个常用的**控制并发连接数**的接口是 queue(worker, concurrency) ，大家可以去看看它的API。
-  
   当你需要去多个源(一般是小于 10 个)汇总数据的时候，用 eventproxy 方便；
   当你需要用到队列，需要控制并发数，或者你喜欢函数式编程思维时，使用 async。
