@@ -25,7 +25,7 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port, function () {
+server.listen(port, () => {
   console.log( 'myappgenerator started in ' + app.get('env') +' mode, on http://localhost:' +
       app.get('port') + ' ; press Ctrl-C to terminate.' );
 });

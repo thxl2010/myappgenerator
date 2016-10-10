@@ -16,11 +16,11 @@ var del = require('del'); // 清除文件
 var rename = require('gulp-rename'); // 重命名
 var concat = require('gulp-concat'); // 合并文件
 var merge = require('merge-stream');
-var source = require('vinyl-source-stream');
+var source = require('vinyl-source-stream'); // gulp 是基于 node 流（stream）的，更具体地说，是基于 vinyl streams 的，这是一种虚拟的文件格式。Browserify 返回一个可读的 stream，但不是 vinyl stream。因此我们必须用 vinyl-source-stream 对 stream 进行相应转化，以确保 gulp 后续逻辑能继续执行。这是一个额外的插件，但它小巧且职责单一。
 var uglify = require('gulp-uglify'); // 压缩js代码
 var sourcemaps = require('gulp-sourcemaps');
 var cleancss = require('gulp-clean-css'); // 压缩css
-var buffer = require('vinyl-buffer');
+var buffer = require('vinyl-buffer'); // 由于 gulp-uglify 现在不支持 stream，而支持 buffer。vinyl-buffer 能将 stream 转为 buffer，让 gulp-uglify 能正常运行。
 var browserify = require('browserify');
 var watchify = require('watchify');
 var jade = require('gulp-jade');
@@ -30,6 +30,8 @@ var jshint = require('gulp-jshint');   // js检查
 var revAppend = require('gulp-rev-append'); // 插入文件指纹（MD5）,文件引用加版本号
 var cache = require('gulp-cache'); // 缓存当前任务中的文件，只让已修改的文件通过管道
 var browserSync = require('browser-sync'); // 保存自动刷新
+var babel = require('gulp-babel');
+var babelify = require("babelify"); // http://babeljs.io/docs/setup/#installation
 
 var jsConfig = require('./resources/js/config/index');
 
@@ -129,6 +131,7 @@ gulp.task('scripts', function () {
     return fs.lstatSync(pathSrc.scripts + '/' + fileName).isFile();
   }).map(function (fileName) {
     return browserify(pathSrc.scripts + '/' + fileName, {debug: true})
+        .transform("babelify", {presets: ["es2015"]})
         .bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
         .pipe(source(fileName))
@@ -230,7 +233,8 @@ gulp.task('watch.js', function () {
     var destPath = path.join(JSDest, dest);
 
     function bundle() {
-      return b.bundle()
+      return b.transform("babelify", {presets: ["es2015"]})
+          .bundle()
           .on('error', gutil.log.bind(gutil, 'Browserify Error'))
           .pipe(source(dest))
           .pipe(gulp.dest(JSDest))

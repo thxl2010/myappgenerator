@@ -14,7 +14,7 @@ $(function () {
   getAllUser();
 });
 
-$add.on('click', function (e) {
+$add.on('click', (e) => {
   console.log('click : ', e);
   var user = {
     name: $name.val(),
@@ -31,8 +31,8 @@ function addUser(user) {
   if (!user.signature) {
     return Common.flashAjaxInfo('请输入用户签名！', 'error');
   }
-  Common.doAjaxWithInfo(function () {
-    Services.ajaxPost('/users/addUser', user, function (err, result) {
+  Common.doAjaxWithInfo(() => {
+    Services.ajaxPost('/users/addUser', user, (err, result) => {
       if(err) {
         return done(err);
       }
