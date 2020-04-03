@@ -2,7 +2,7 @@
  * @Author: Duyb
  * @Date: 2020-04-03 13:28:39
  * @Last Modified by: Duyb
- * @Last Modified time: 2020-04-03 18:18:04
+ * @Last Modified time: 2020-04-04 01:36:33
  */
 var fs = require('fs');
 var superagent = require('superagent');
@@ -17,7 +17,7 @@ const opts = { fields };
 
 // ema Glossary
 const GLOSSARY_URL = 'https://www.ema.europa.eu/en/about-us/about-website/glossary/';
-const LETTER_LIST = [];
+let LETTER_LIST = [];
 const PAGE_LIST = []; // https://www.ema.europa.eu/en/about-us/about-website/glossary/name_az/A
 const GLOSSARY_MAP = {}; // { letter: [{ letter, key, content }] }
 
@@ -64,17 +64,18 @@ function getByLetters() {
               var href = $href.attr('href').trim();
               var hrefName = $href.text().trim();
               content = content.replace(`'${hrefName}'`, `[${hrefName}](${href})`);
-              console.log('>>>>>>>>>>>>>>>>>>>>>>> ', key, hrefName, href, content);
+              // console.log('>>>>>>>>>>>>>>>>>>>>>>> ', letter, key, hrefName, href, content);
             });
 
-            GLOSSARY_MAP[letter].push({
+            const co = {
               letter,
               key,
               content,
-            });
+            };
+            GLOSSARY_MAP[letter].push(co);
 
             // 相当于一个计数器 ep.emit() 来告诉 ep 自己，某某事件已经完成了。
-            ep.emit('BlogArticleHtml', content);
+            ep.emit('BlogArticleHtml', co);
           });
         });
       }, 1000 * 60);
@@ -88,16 +89,21 @@ function getByLetters() {
     console.log('******************* ep.after ********************');
     // console.log('content : ', content);
     // console.log('GLOSSARY_MAP : ', GLOSSARY_MAP);
-    append2Json('all', GLOSSARY_MAP);
-    Object.entries(GLOSSARY_MAP).forEach((item) => {
-      append2Json(item[0], item[1]);
-      json2Csv(item[0], item[1]);
-    });
+    setTimeout(() => {
+      // console.log('all GLOSSARY_MAP :', JSON.stringify(GLOSSARY_MAP));
+      // console.log('\n\n\n <<<<<<<<<<<<<<<<<<<<<<<<< finish get');
+      append2Json('all', GLOSSARY_MAP);
+      Object.entries(GLOSSARY_MAP).forEach((item) => {
+        // append2Json(item[0], item[1]);
+        json2Csv('all', item[1]);
+        // json2Csv(item[0], item[1]);
+      });
+    }, 10000);
   });
 }
 
 function append2Json(name, value) {
-  fs.writeFile(`./json/${name}-glossary.json`, JSON.stringify(value), 'utf8', (err) => {
+  fs.appendFile(`./json/${name}-glossary.json`, JSON.stringify(value), 'utf8', (err) => {
     if (err) {
       console.log('json 写入失败', err);
     } else {
@@ -107,11 +113,11 @@ function append2Json(name, value) {
 }
 
 function append2Csv(path, value) {
-  fs.writeFile(path, value, 'utf8', (err) => {
+  fs.appendFile(path, value, 'utf8', (err) => {
     if (err) {
-      console.log('csv 写入失败', err);
+      // console.log('csv 写入失败', err);
     } else {
-      console.log('csv 写入成功');
+      // console.log('csv 写入成功');
     }
   });
 }
@@ -119,10 +125,10 @@ function append2Csv(path, value) {
 function json2Csv(name, data) {
   try {
     const csv = parse(data, opts);
-    console.log(`^^^^^^^^^^^^^^^^^^^^^^^^^ json2Csv name : ${name} , csv : ${csv}`);
+    // console.log(`^^^^^^^^^^^^^^^^^^^^^^^^^ json2Csv name : ${name} , csv : ${csv}`);
     append2Csv(`./csv/${name}-glossary.csv`, csv);
   } catch (err) {
-    console.error(`^^^^^^^^^^^^^^^^^^^^^^^  json2Csv err: ${err}`);
+    // console.error(`^^^^^^^^^^^^^^^^^^^^^^^  json2Csv err: ${err}`);
   }
 }
 
