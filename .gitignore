@@ -1,7 +1,10 @@
 .idea
 node_modules
+bower_components
 /logs
 /.settings
 public
 /rev/
 
+.vscode
+.history

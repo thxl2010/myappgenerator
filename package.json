@@ -25,6 +25,7 @@
     "express": "~4.13.4",
     "extend": "^3.0.0",
     "jade": "~1.11.0",
+    "json2csv": "^5.0.0",
     "jstransformer-markdown-it": "^0.2.3",
     "morgan": "~1.7.0",
     "mysql": "^2.11.1",
