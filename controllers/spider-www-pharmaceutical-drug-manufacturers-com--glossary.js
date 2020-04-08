@@ -2,7 +2,7 @@
  * @Author: Duyb
  * @Date: 2020-04-03 13:28:39
  * @Last Modified by: Duyb
- * @Last Modified time: 2020-04-09 00:24:34
+ * @Last Modified time: 2020-04-09 00:46:26
  */
 var fs = require('fs');
 var superagent = require('superagent');
@@ -101,6 +101,7 @@ function getByLetters() {
                 });
 
               GLOSSARY_MAP[letter] = list;
+              console.log(`\n\n *******************************************\n ${letter} : ${list}`);
 
               // 相当于一个计数器 ep.emit() 来告诉 ep 自己，某某事件已经完成了。
               ep.emit('BlogArticleHtml', list);
@@ -121,10 +122,10 @@ function getByLetters() {
     setTimeout(() => {
       console.log('all GLOSSARY_MAP :', JSON.stringify(GLOSSARY_MAP));
       // console.log('\n\n\n <<<<<<<<<<<<<<<<<<<<<<<<< finish get');
-      append2Json('pharmaceutical-drug-manufacturers', GLOSSARY_MAP);
+      append2Json('pharmaceutical-drug-manufacturers1', GLOSSARY_MAP);
       Object.entries(GLOSSARY_MAP).forEach((item) => {
         // append2Json(item[0], item[1]);
-        json2Csv('pharmaceutical-drug-manufacturers', item[1]);
+        json2Csv('pharmaceutical-drug-manufacturers1', item[1]);
         // json2Csv(item[0], item[1]);
       });
     }, 10000);
