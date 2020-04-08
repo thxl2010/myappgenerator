@@ -2,7 +2,7 @@
  * @Author: Duyb
  * @Date: 2020-04-03 13:28:39
  * @Last Modified by: Duyb
- * @Last Modified time: 2020-04-09 00:46:26
+ * @Last Modified time: 2020-04-09 01:39:40
  */
 var fs = require('fs');
 var superagent = require('superagent');
@@ -26,23 +26,26 @@ var ep = new eventproxy();
 
 function init(req, res, next) {
   console.log(`GLOSSARY_URL : ${GLOSSARY_URL}`);
-  superagent.get(GLOSSARY_URL).end(function(err, pres) {
-    var $ = cheerio.load(pres.text);
-    console.log('\n------------------- load ---------------------\n');
-    $('.content-box .text1')
-      .eq(0)
-      .find('a')
-      .each(function(i, item) {
-        var letter = $(item)
-          .text()
-          .charAt(0);
-        LETTER_LIST.push(letter);
-        const letter_url = letter !== 'A' ? `-${letter.toLowerCase()}` : '';
-        PAGE_LIST.push(`${GLOSSARY_URL_PRE}${letter_url}.html`);
-      });
-    console.log('getByLetters LETTER_LIST : ', JSON.stringify(LETTER_LIST));
-    getByLetters();
-  });
+  // superagent.get(GLOSSARY_URL).end(function(err, pres) {
+  //   var $ = cheerio.load(pres.text);
+  //   console.log('\n------------------- load ---------------------\n');
+  //   $('.content-box .text1')
+  //     .eq(0)
+  //     .find('a')
+  //     .each(function(i, item) {
+  //       var letter = $(item)
+  //         .text()
+  //         .charAt(0);
+  //       LETTER_LIST.push(letter);
+  //       const letter_url = letter !== 'A' ? `-${letter.toLowerCase()}` : '';
+  //       PAGE_LIST.push(`${GLOSSARY_URL_PRE}${letter_url}.html`);
+  //     });
+  //   console.log('getByLetters LETTER_LIST : ', JSON.stringify(LETTER_LIST));
+  //   getByLetters();
+  // });
+  LETTER_LIST = ['W']
+  console.log('getByLetters LETTER_LIST : ', JSON.stringify(LETTER_LIST));
+  getByLetters();
 }
 exports.index = init;
 
@@ -100,13 +103,15 @@ function getByLetters() {
                   };
                 });
 
-              GLOSSARY_MAP[letter] = list;
-              console.log(`\n\n *******************************************\n ${letter} : ${list}`);
+              GLOSSARY_MAP[letter] = GLOSSARY_MAP[letter].concat(list);
 
               // 相当于一个计数器 ep.emit() 来告诉 ep 自己，某某事件已经完成了。
               ep.emit('BlogArticleHtml', list);
             }
           });
+
+          // console.log(`\n\n ************\n ${letter} : ${JSON.stringify(GLOSSARY_MAP[letter])}`);
+          console.log(`\n\n ************\n ${letter}`);
         });
       }, 1000 * 10 * n);
     })(letter);
@@ -122,10 +127,10 @@ function getByLetters() {
     setTimeout(() => {
       console.log('all GLOSSARY_MAP :', JSON.stringify(GLOSSARY_MAP));
       // console.log('\n\n\n <<<<<<<<<<<<<<<<<<<<<<<<< finish get');
-      append2Json('pharmaceutical-drug-manufacturers1', GLOSSARY_MAP);
+      append2Json('pharmaceutical-drug-manufacturers2', GLOSSARY_MAP);
       Object.entries(GLOSSARY_MAP).forEach((item) => {
         // append2Json(item[0], item[1]);
-        json2Csv('pharmaceutical-drug-manufacturers1', item[1]);
+        json2Csv('pharmaceutical-drug-manufacturers2', item[1]);
         // json2Csv(item[0], item[1]);
       });
     }, 10000);
@@ -145,9 +150,9 @@ function append2Json(name, value) {
 function append2Csv(path, value) {
   fs.appendFile(path, value, 'utf8', (err) => {
     if (err) {
-      // console.log('csv 写入失败', err);
+      console.log('csv 写入失败', err);
     } else {
-      // console.log('csv 写入成功');
+      console.log('csv 写入成功');
     }
   });
 }
