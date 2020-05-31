@@ -27,7 +27,7 @@
     "jade": "~1.11.0",
     "json2csv": "^5.0.0",
     "jstransformer-markdown-it": "^0.2.3",
-    "morgan": "~1.7.0",
+    "morgan": "~1.9.1",
     "mysql": "^2.11.1",
     "nib": "^1.1.2",
     "serve-favicon": "~2.3.0",
