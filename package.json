@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "async": "^2.0.1",
+    "axios": "^0.19.2",
     "body-parser": "~1.15.1",
     "bower": "^1.7.9",
     "cheerio": "^0.22.0",
@@ -26,6 +27,7 @@
     "extend": "^3.0.0",
     "jade": "~1.11.0",
     "json2csv": "^5.0.0",
+    "jsonp": "^0.2.1",
     "jstransformer-markdown-it": "^0.2.3",
     "morgan": "~1.7.0",
     "mysql": "^2.11.1",
