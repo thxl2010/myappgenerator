@@ -3,7 +3,7 @@
  * @Author: Duyb
  * @Date: 2020-11-08 21:52:22
  * @Last Modified by: Duyb
- * @Last Modified time: 2020-11-09 14:42:44
+ * @Last Modified time: 2020-11-09 16:30:32
  */
 const fs = require('fs');
 const superagent = require('superagent');
@@ -92,21 +92,21 @@ function getList() {
 
               const co = {
                 title: $titleA.length
-                  ? `标题：[${titleName}]    ${titleDate}`
-                  : title,
-                question,
-                answer,
+                  ? `[${titleName}](${DOMAIN}${titleUrl})`
+                  : `[${title}]`,
+                date: titleDate,
               };
               QS_ANS.push(co);
 
-              // console.log('title : ', co.title);
+              console.log('>>> pageNo : ', i + 1, ' idx :', idx, ' k :', k);
+              // console.log('title : ', co.title, ' date :', titleDate);
               // console.log('question : ', co.question);
               // console.log('answer : ', co.answer);
             });
             // 相当于一个计数器 ep.emit() 来告诉 ep 自己，某某事件已经完成了。
             ep.emit('emit', i);
           });
-      }, 1000 * 2);
+      }, 1000 * ii);
     })(ii);
   });
 
@@ -116,10 +116,8 @@ function getList() {
     // ...
     console.log('emit i: ', i, 'QS_ANS.length :', QS_ANS.length);
 
-    append2Json('./out/20201108/cfdi/qs_ans_20201109.json', QS_ANS);
-    // append2Csv('./out/20201108/cfdi/qs_ans.csv', QS_ANS);
-    // `./20201108/cfdi/qs_ans.csv`
-    json2Csv('./out/20201108/cfdi/qs_ans_20201109.csv', QS_ANS);
+    append2Json('./out/cfdi/20201108/药物临床试验现场检查.json', QS_ANS);
+    json2Csv('./out/cfdi/20201108/药物临床试验现场检查.csv', QS_ANS);
   });
 }
 

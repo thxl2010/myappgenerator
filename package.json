@@ -35,7 +35,8 @@
     "nib": "^1.1.2",
     "serve-favicon": "~2.3.0",
     "stylus": "^0.54.5",
-    "superagent": "^2.2.0"
+    "superagent": "^2.2.0",
+    "superagent-charset": "^1.2.0"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.16.0",

@@ -1,0 +1,7 @@
+node_modules/*
+static/*
+dist/*
+src/assets/fonts/*
+src/assets/js/thirdParty/*
+
+index.html

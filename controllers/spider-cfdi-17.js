@@ -3,7 +3,7 @@
  * @Author: Duyb
  * @Date: 2020-11-08 21:52:22
  * @Last Modified by: Duyb
- * @Last Modified time: 2020-11-09 16:45:32
+ * @Last Modified time: 2020-11-09 16:58:07
  */
 const fs = require('fs');
 const superagent = require('superagent');
@@ -35,11 +35,14 @@ const form = {
   // pk: '',
 };
 const DOMAIN = 'https://www.cfdi.org.cn/cfdi/';
-const BASE_URL_227 =
-  'https://www.cfdi.org.cn/cfdi/index?module=A004&m1=10&m2=&nty=STA024&tcode=STA026&flid=4';
+const BASE_URL =
+  'https://www.cfdi.org.cn/cfdi/index?module=A004&m1=10&m2=&=k=&nty=STA024&tcode=STA026&flid=1&part=main&iTotal_length=82&name=default&total_pages=17';
+// const BASE_URL_227 =
+//   'https://www.cfdi.org.cn/cfdi/index?module=A004&m1=10&m2=&nty=STA024&tcode=STA026&flid=4';
 const QS_ANS = [];
-const number = 227; // 页数
-const count = 1131;
+
+const number = 17; // 页数
+const count = 82; // 记录笔数
 let k = 0;
 
 // csv key
@@ -49,17 +52,9 @@ const opts = { fields };
 function getList() {
   for (let i = 0; i <= number; i++) {
     setTimeout(() => {
-      const pageUrl = `${BASE_URL_227}&pageNo=${i + 1}`;
+      const pageUrl = `${BASE_URL}&pageNo=${i + 1}`;
       superagent
         .get(pageUrl)
-        // .set(
-        //   'accept',
-        //   // 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-        //   'text/html'
-        // )
-        // // .set('accept-encoding', 'gzip, deflate, br')
-        // .set('accept-language', 'zh-CN,zh;q=0.9')
-        // .set('accept-charset', 'utf-8')
         .charset('gbk')
         .end((err, pres) => {
           // pres.text 里面存储着请求返回的 html 内容，将它传给 cheerio.load 之后
@@ -94,7 +89,7 @@ function getList() {
             const co = {
               title: $titleA.length
                 ? `[${titleName}](${DOMAIN}${titleUrl})`
-                : `[${title}]`,
+                : `${title}`,
               date: titleDate,
               question,
               answer,
@@ -102,8 +97,8 @@ function getList() {
 
             k += 1;
             console.log('>>> pageNo : ', i + 1, ' idx :', idx, ' k :', k);
-            // console.log('title : ', co.title, ' date :', titleDate);
-            // console.log('question : ', co.question);
+            // console.log('question : ', co.question, ' date :', titleDate);
+            // console.log('answer : ', co.answer);
             // console.log('answer : ', co.answer);
 
             QS_ANS.push(co);
@@ -127,8 +122,8 @@ function getList() {
       ' QS_ANS.length :',
       QS_ANS.length
     );
-    append2Json('./out/cfdi/20201109/化学药品生产现场检查.json', QS_ANS);
-    json2Csv('./out/cfdi/20201109/化学药品生产现场检查.csv', QS_ANS);
+    append2Json('./out/cfdi/20201108/药物临床试验现场检查.json', QS_ANS);
+    json2Csv('./out/cfdi/20201108/药物临床试验现场检查.csv', QS_ANS);
   });
 }
 
