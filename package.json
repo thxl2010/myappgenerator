@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "async": "^2.0.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "body-parser": "~1.15.1",
     "bower": "^1.7.9",
     "cheerio": "^0.22.0",
